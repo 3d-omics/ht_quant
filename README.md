@@ -51,7 +51,7 @@ screen -S the_name_I_want_for_my_session
 
 To get out from the screen session type `ctrl+A` followed by `D`.
 
-To (re-)enter into that session:  
+To (re-)enter into that session:
 
 ``` sh {eval=FALSE}
 screen -r the_name_I_want_for_my_session
