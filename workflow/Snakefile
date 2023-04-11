@@ -18,9 +18,13 @@ print(SAMPLE)
 include: "rules/folders.smk"
 include: "rules/fastp.smk"
 include: "rules/ribodetector.smk"
+include: "rules/star.smk"
 
 
 rule all:
     input:
         # expand(FASTP / "{sample}_1.fq.gz", sample=SAMPLE),
-        expand(RIBO / "{sample}_1.fq.gz", sample=SAMPLE),
+        # expand(RIBO / "{sample}_1.fq.gz", sample=SAMPLE),
+        STAR / "index",
+        expand(STAR / "{sample}.Aligned.sortedByCoord.out.bam", sample=SAMPLE),
+        expand(STAR / "{sample}.Unmapped.out.mate1.fq.gz", sample=SAMPLE),
