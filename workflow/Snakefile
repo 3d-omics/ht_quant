@@ -1,0 +1,29 @@
+############################################################################
+#### Transcriptomics snakefile
+#### Authors: Antton Alberdi/Raphael Eisenhofer
+############################################################################
+
+
+configfile: "config/pipeline.yml"
+
+
+### Setup sample inputs
+import os
+from glob import glob
+
+SAMPLE = [
+    os.path.basename(fn).replace("_1.fq.gz", "")
+    for fn in glob(f"resources/reads/*_1.fq.gz")
+]
+
+print("Detected the following samples:")
+print(SAMPLE)
+
+
+include: "rules/folders.smk"
+include: "rules/fastp.smk"
+
+
+rule all:
+    input:
+        expand(FASTP / "{sample}_1.fq.gz", sample=SAMPLE),

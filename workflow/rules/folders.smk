@@ -1,0 +1,5 @@
+READS = Path("resources/reads/")
+REFERENCE = Path("resources/reference/")
+FASTP = Path("results/fastp/")
+RIBO = Path("results/ribodetector/")
+STAR = Path("results/star/")
