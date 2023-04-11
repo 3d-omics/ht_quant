@@ -1,8 +1,3 @@
-############################################################################
-#### Transcriptomics snakefile
-#### Authors: Antton Alberdi/Raphael Eisenhofer
-############################################################################
-
 
 configfile: "config/pipeline.yml"
 
@@ -22,8 +17,10 @@ print(SAMPLE)
 
 include: "rules/folders.smk"
 include: "rules/fastp.smk"
+include: "rules/ribodetector.smk"
 
 
 rule all:
     input:
-        expand(FASTP / "{sample}_1.fq.gz", sample=SAMPLE),
+        # expand(FASTP / "{sample}_1.fq.gz", sample=SAMPLE),
+        expand(RIBO / "{sample}_1.fq.gz", sample=SAMPLE),
