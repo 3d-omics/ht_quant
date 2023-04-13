@@ -25,7 +25,6 @@ include: "rules/folders.smk"
 include: "rules/reads.smk"
 include: "rules/reference.smk"
 include: "rules/fastp.smk"
-include: "rules/ribodetector.smk"
 include: "rules/star.smk"
 
 
