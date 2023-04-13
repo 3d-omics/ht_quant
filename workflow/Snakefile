@@ -35,4 +35,4 @@ rule all:
         # rules.ribodetector_all_samples.input,
         # rules.star_index.input,
         # rules.star_all_samples.input,
-        rules.star_compress_all.input,
+        rules.star_all.input,

@@ -5,3 +5,4 @@ channels:
 dependencies:
   - star=2.7.10a
   - pigz=2.3.4
+  - samtools=1.17

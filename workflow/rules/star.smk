@@ -33,7 +33,7 @@ rule star_align:
         r2=FASTP / "{sample}.{library}_2.fq.gz",
         index=STAR / "index",
     output:
-        bam=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam",
+        bam=temp(STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam"),
         u1=temp(STAR / "{sample}.{library}.Unmapped.out.mate1"),
         u2=temp(STAR / "{sample}.{library}.Unmapped.out.mate2"),
     log:
@@ -90,3 +90,44 @@ rule star_compress_all:
             for sample, library in SAMPLE_LIB
             for mate in "mate1 mate2".split()
         ],
+
+
+rule star_cram:
+    input:
+        bam=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam",
+        reference=REFERENCE / "genome.fa",
+    output:
+        cram=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram",
+        crai=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram.crai",
+    log:
+        STAR / "{sample}.{library}.cram.log",
+    conda:
+        "../envs/star.yml"
+    threads: 24
+    shell:
+        """
+        samtools sort \
+            -l 9 \
+            -m 1G \
+            -o {output.cram} \
+            --output-fmt CRAM \
+            --reference {input.reference} \
+            -@ {threads} \
+            --write-index \
+            {input.bam} \
+        2> {log} 1>&2
+        """
+
+
+rule star_cram_all:
+    input:
+        [
+            STAR / f"{sample}.{library}.Aligned.sortedByCoord.out.cram"
+            for sample, library in SAMPLE_LIB
+        ],
+
+
+rule star_all:
+    input:
+        rules.star_compress_all.input,
+        rules.star_cram_all.input,
