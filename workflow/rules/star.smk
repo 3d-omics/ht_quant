@@ -1,8 +1,7 @@
-
 rule star_index:
     input:
-        dna="resources/reference/chrX_sub.fa",
-        gtf="resources/reference/chrX_sub.gtf",
+        dna=REFERENCE / "genome.fa",
+        gtf=REFERENCE / "annotation.gtf",
     output:
         folder=directory("results/star/index"),
     params:
@@ -10,7 +9,7 @@ rule star_index:
     conda:
         "../envs/star.yml"
     log:
-        "resources/star/index.log",
+        REFERENCE / "index.log",
     threads: 24
     resources:
         mem_gb=150,
@@ -28,29 +27,17 @@ rule star_index:
         """
 
 
-def get_star_out_prefix(wildcards):
-    return STAR / f"{wildcards.sample}."
-
-
-def get_star_output_r1(wildcards):
-    return STAR / f"{wildcards.sample}.Unmapped.out.mate1"
-
-
-def get_star_output_r2(wildcards):
-    return STAR / f"{wildcards.sample}.Unmapped.out.mate2"
-
-
 rule star_align:
     input:
-        read1=RIBO / "{sample}_1.fq.gz",
-        read2=RIBO / "{sample}_2.fq.gz",
+        r1=FASTP / "{sample}.{library}_1.fq.gz",
+        r2=FASTP / "{sample}.{library}_2.fq.gz",
         index=STAR / "index",
     output:
-        bam=STAR / "{sample}.Aligned.sortedByCoord.out.bam",
-        u1=STAR / "{sample}.Unmapped.out.mate1",
-        u2=STAR / "{sample}.Unmapped.out.mate2",
+        bam=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam",
+        u1=temp(STAR / "{sample}.{library}.Unmapped.out.mate1"),
+        u2=temp(STAR / "{sample}.{library}.Unmapped.out.mate2"),
     log:
-        STAR / "{sample}.log",
+        STAR / "{sample}.{library}.log",
     params:
         out_prefix=get_star_out_prefix,
     conda:
@@ -67,7 +54,7 @@ rule star_align:
             --runMode alignReads \
             --runThreadN {threads} \
             --genomeDir {input.index} \
-            --readFilesIn {input.read1} {input.read2} \
+            --readFilesIn {input.r1} {input.r2} \
             --outFileNamePrefix {params.out_prefix} \
             --outSAMtype BAM SortedByCoordinate \
             --outReadsUnmapped Fastx \
@@ -79,16 +66,27 @@ rule star_align:
 
 rule star_compress_unpaired:
     input:
-        u1=STAR / "{sample}.Unmapped.out.mate1",
-        u2=STAR / "{sample}.Unmapped.out.mate2",
+        u1=STAR / "{sample}.{library}.Unmapped.out.mate1",
+        u2=STAR / "{sample}.{library}.Unmapped.out.mate2",
     output:
-        u1=STAR / "{sample}.Unmapped.out.mate1.fq.gz",
-        u2=STAR / "{sample}.Unmapped.out.mate2.fq.gz",
+        u1=STAR / "{sample}.{library}.Unmapped.out.mate1.fq.gz",
+        u2=STAR / "{sample}.{library}.Unmapped.out.mate2.fq.gz",
     log:
-        STAR / "{sample}.compression.log",
+        STAR / "{sample}.{library}.compression.log",
+    conda:
+        "../envs/star.yml"
     threads: 24
     shell:
         """
         pigz --best --stdout {input.u1} > {output.u1} 2>  {log}
         pigz --best --stdout {input.u2} > {output.u2} 2>> {log}
         """
+
+
+rule star_compress_all:
+    input:
+        [
+            STAR / f"{sample}.{library}.Unmapped.out.{mate}.fq.gz"
+            for sample, library in SAMPLE_LIB
+            for mate in "mate1 mate2".split()
+        ],

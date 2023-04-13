@@ -1,16 +1,16 @@
 rule fastp:
     input:
-        read1=READS / "{sample}_1.fq.gz",
-        read2=READS / "{sample}_2.fq.gz",
+        read1=READS / "{sample}.{library}_1.fq.gz",
+        read2=READS / "{sample}.{library}_2.fq.gz",
     output:
-        read1=temp(FASTP / "{sample}_1.fq.gz"),
-        read2=temp(FASTP / "{sample}_2.fq.gz"),
-        fastp_html=FASTP / "{sample}.html",
-        fastp_json=FASTP / "{sample}.json",
+        read1=temp(FASTP / "{sample}.{library}_1.fq.gz"),
+        read2=temp(FASTP / "{sample}.{library}_2.fq.gz"),
+        fastp_html=FASTP / "{sample}.{library}.html",
+        fastp_json=FASTP / "{sample}.{library}.json",
     conda:
         "../envs/fastp.yml"
     log:
-        FASTP / "{sample}.log",
+        FASTP / "{sample}.{library}.log",
     threads: 32
     params:
         n_base_limit=5,
@@ -46,4 +46,8 @@ rule fastp:
 rule fastp_all_samples:
     """Collect fastp files"""
     input:
-        [FASTP / f"{sample}_{end}.fq.gz" for sample in SAMPLE for end in "1 2".split()],
+        [
+            FASTP / f"{sample}.{library}_{end}.fq.gz"
+            for sample, library in SAMPLE_LIB
+            for end in "1 2".split()
+        ],
