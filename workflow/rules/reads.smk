@@ -4,8 +4,8 @@ rule reads_link_pe:
         forward_=get_forward,
         reverse_=get_reverse,
     output:
-        forward_=READS / "{sample}.{library}_1.fq.gz",
-        reverse_=READS / "{sample}.{library}_2.fq.gz",
+        forward_=temp(READS / "{sample}.{library}_1.fq.gz"),
+        reverse_=temp(READS / "{sample}.{library}_2.fq.gz"),
     log:
         READS / "{sample}.{library}.log",
     conda:
