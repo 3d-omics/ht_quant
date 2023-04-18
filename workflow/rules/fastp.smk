@@ -51,3 +51,19 @@ rule fastp_all_samples:
             for sample, library in SAMPLE_LIB
             for end in "1 2".split()
         ],
+
+
+rule fastp_fastqc:
+    """Collect fasqtc reports from the results of fastp"""
+    input:
+        [
+            FASTP / f"{sample}.{library}_{end}_fastqc.html"
+            for sample, library in SAMPLE_LIB
+            for end in "1 2".split(" ")
+        ],
+
+
+rule fastp_all:
+    input:
+        rules.fastp_all_samples.input,
+        rules.fastp_fastqc.input,

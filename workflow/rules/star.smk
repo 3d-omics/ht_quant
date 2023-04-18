@@ -58,7 +58,7 @@ rule star_align:
             --outFileNamePrefix {params.out_prefix} \
             --outSAMtype BAM SortedByCoordinate \
             --outReadsUnmapped Fastx \
-            --readFilesCommand zcat \
+            --readFilesCommand "gzip -cd" \
             --quantMode GeneCounts \
         2>> {log} 1>&2
         """
