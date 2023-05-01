@@ -24,3 +24,13 @@ rule reads_link:
             for sample, library in SAMPLE_LIB
             for end in ["1", "2"]
         ],
+
+
+rule reads_fastqc:
+    """Collect fasqtc reports from the reads"""
+    input:
+        [
+            READS / f"{sample}.{library}_{end}_fastqc.html"
+            for sample, library in SAMPLE_LIB
+            for end in ["1", "2"]
+        ],
