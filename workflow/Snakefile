@@ -32,7 +32,7 @@ include: "rules/star.smk"
 rule all:
     input:
         # rules.reads_link.input,
-        # rules.reads_fastqc.input,
+        rules.reads_fastqc.input,
         # rules.reference.input,
         rules.fastp_all.input,
         # rules.ribodetector_all_samples.input,
