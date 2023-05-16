@@ -27,15 +27,17 @@ include: "rules/reference.smk"
 include: "rules/fastqc.smk"
 include: "rules/fastp.smk"
 include: "rules/star.smk"
+include: "rules/report_step.smk"
 
 
 rule all:
     input:
         # rules.reads_link.input,
-        rules.reads_fastqc.input,
+        # rules.reads_fastqc.input,
         # rules.reference.input,
-        rules.fastp_all.input,
+        # rules.fastp_all.input,
         # rules.ribodetector_all_samples.input,
         # rules.star_index.input,
         # rules.star_all_samples.input,
-        rules.star_all.input,
+        # rules.star_all.input,
+        rules.report_step.input,
