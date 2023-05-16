@@ -1,11 +1,11 @@
-rule reads_link_pe:
+rule reads_link_one:
     """Make a link to the original file, with a prettier name than default"""
     input:
         forward_=get_forward,
         reverse_=get_reverse,
     output:
-        forward_=temp(READS / "{sample}.{library}_1.fq.gz"),
-        reverse_=temp(READS / "{sample}.{library}_2.fq.gz"),
+        forward_=READS / "{sample}.{library}_1.fq.gz",
+        reverse_=READS / "{sample}.{library}_2.fq.gz",
     log:
         READS / "{sample}.{library}.log",
     conda:
@@ -17,7 +17,8 @@ rule reads_link_pe:
         """
 
 
-rule reads_link:
+rule reads_link_all:
+    """Link all reads in the samples.tsv"""
     input:
         [
             READS / f"{sample}.{library}_{end}.fq.gz"
@@ -26,11 +27,23 @@ rule reads_link:
         ],
 
 
-rule reads_fastqc:
-    """Collect fasqtc reports from the reads"""
+rule reads_fastqc_all:
+    """Run fastqc on all raw reads"""
     input:
         [
-            READS / f"{sample}.{library}_{end}_fastqc.html"
+            READS / f"{sample}.{library}_{end}_fastqc.{extension}"
             for sample, library in SAMPLE_LIB
             for end in ["1", "2"]
+            for extension in ["html", "zip"]
         ],
+
+
+rule reads:
+    """Link all reads and run fastqc on them"""
+    input:
+        rules.reads_link_all.input,
+        rules.reads_fastqc_all.input,
+
+
+localrules:
+    reads_link_one,
