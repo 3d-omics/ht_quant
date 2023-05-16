@@ -41,3 +41,4 @@ rule all:
         # rules.star_all_samples.input,
         # rules.star_all.input,
         rules.report_step.input,
+        rules.report_library.input
