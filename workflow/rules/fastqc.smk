@@ -1,4 +1,4 @@
-rule fastqc:
+rule fastqc_one:
     input:
         "{prefix}.fq.gz",
     output:
