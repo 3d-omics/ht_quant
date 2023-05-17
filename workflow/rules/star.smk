@@ -36,6 +36,7 @@ rule star_align:
         bam=temp(STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam"),
         u1=temp(STAR / "{sample}.{library}.Unmapped.out.mate1"),
         u2=temp(STAR / "{sample}.{library}.Unmapped.out.mate2"),
+        report=STAR / "{sample}.{library}.Log.final.out",
     log:
         STAR / "{sample}.{library}.log",
     params:
