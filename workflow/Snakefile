@@ -17,9 +17,6 @@ SAMPLE_LIB = samples[["sample", "library"]].values.tolist()
 MAX_THREADS = params["max_threads"]
 
 
-configfile: "config/pipeline.yml"
-
-
 include: "rules/common.smk"
 include: "rules/folders.smk"
 include: "rules/reads_functions.smk"
