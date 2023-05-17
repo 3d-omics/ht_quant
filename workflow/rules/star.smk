@@ -45,8 +45,8 @@ rule star_align:
         "../envs/star.yml"
     threads: 24
     resources:
-        mem_gb=150,
-        time="08:00:00",
+        mem_mb=4 * 1024,
+        runtime=24 * 60,
     shell:
         """
         ulimit -n 90000 2> {log} 1>&2
@@ -105,6 +105,9 @@ rule star_cram:
     conda:
         "../envs/star.yml"
     threads: 24
+    resources:
+        mem_mb=24 * 2048,
+        runtime=24 * 60,
     shell:
         """
         samtools sort \

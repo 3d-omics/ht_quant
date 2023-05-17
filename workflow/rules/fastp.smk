@@ -21,7 +21,7 @@ rule fastp_trim_one:
     threads: 24
     resources:
         mem_mb=1024,
-        runtime=240,
+        runtime=24 * 60,
     conda:
         "../envs/fastp.yml"
     shell:
