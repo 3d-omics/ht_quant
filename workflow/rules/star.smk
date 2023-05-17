@@ -5,7 +5,7 @@ rule star_index:
     output:
         folder=directory("results/star/index"),
     params:
-        readlength=config["readlength"],
+        sjdbOverhang=params["star"]["index"]["sjdbOverhang"],
     conda:
         "../envs/star.yml"
     log:
@@ -22,7 +22,7 @@ rule star_index:
             --genomeDir {output.folder} \
             --genomeFastaFiles {input.dna} \
             --sjdbGTFfile {input.gtf} \
-            --sjdbOverhang {params.readlength} \
+            --sjdbOverhang {params.sjdbOverhang} \
         2> {log} 1>&2
         """
 
@@ -60,7 +60,7 @@ rule star_align_one:
             --outSAMtype BAM SortedByCoordinate \
             --outReadsUnmapped Fastx \
             --readFilesCommand "gzip -cd" \
-            --quantMode GeneCounts \
+            --quantMode TranscriptomeSAM \
         2>> {log} 1>&2
         """
 
