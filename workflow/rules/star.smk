@@ -142,3 +142,8 @@ rule star_all:
         rules.star_compress_all.input,
         rules.star_cram_all.input,
         rules.star_report_all.input,
+
+
+rule star:
+    input:
+        rules.star_all.input,

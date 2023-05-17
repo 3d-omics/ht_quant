@@ -43,6 +43,6 @@ rule all:
         # rules.ribodetector_all_samples.input,
         # rules.star_index.input,
         # rules.star_all_samples.input,
-        # rules.star_all.input,
+        rules.star_all.input,  # the crams and compressed files are not in the reports
         rules.report_step.input,
         rules.report_library.input,
