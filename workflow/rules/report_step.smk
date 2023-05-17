@@ -47,9 +47,9 @@ rule report_step_fastp:
 
 
 rule report_step_star:
-    """Collect all reports for the picard step"""
+    """Collect all reports for the star step"""
     input:
-        rules.picard_report_all.input,
+        rules.star_report_all.input,
     output:
         html=REPORT_STEP / "star.html",
     log:

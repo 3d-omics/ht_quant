@@ -127,7 +127,14 @@ rule star_cram_all:
         ],
 
 
+rule star_report_all:
+    """Collect star reports"""
+    input:
+        [STAR / f"{sample}.{library}.Log.final.out" for sample, library in SAMPLE_LIB],
+
+
 rule star_all:
     input:
         rules.star_compress_all.input,
         rules.star_cram_all.input,
+        rules.star_report_all.input,

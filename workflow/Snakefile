@@ -22,12 +22,15 @@ configfile: "config/pipeline.yml"
 
 include: "rules/common.smk"
 include: "rules/folders.smk"
+include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
 include: "rules/reference.smk"
 include: "rules/fastqc.smk"
 include: "rules/fastp.smk"
 include: "rules/star.smk"
+include: "rules/report_library_functions.smk"
 include: "rules/report_step.smk"
+include: "rules/report_library.smk"
 
 
 rule all:
@@ -41,4 +44,4 @@ rule all:
         # rules.star_all_samples.input,
         # rules.star_all.input,
         rules.report_step.input,
-        rules.report_library.input
+        rules.report_library.input,
