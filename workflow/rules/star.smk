@@ -98,10 +98,10 @@ rule star_cram_one:
         bam=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam",
         reference=REFERENCE / "genome.fa",
     output:
-        cram=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram",
+        cram=protected(STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram"),
         crai=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram.crai",
     log:
-        STAR / "{sample}.{library}.cram.log",
+        STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram.log",
     conda:
         "../envs/star.yml"
     threads: 24
