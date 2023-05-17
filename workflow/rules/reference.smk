@@ -2,7 +2,7 @@ rule reference_set_dna:
     input:
         fa=features["dna"],
     output:
-        fa=temp(REFERENCE / "genome.fa"),
+        fa=REFERENCE / "genome.fa",
     log:
         REFERENCE / "genome.log",
     conda:
@@ -15,7 +15,7 @@ rule reference_set_gtf:
     input:
         gtf=features["gtf"],
     output:
-        gtf=temp(REFERENCE / "annotation.gtf"),
+        gtf=REFERENCE / "annotation.gtf",
     log:
         REFERENCE / "annotation.log",
     conda:
