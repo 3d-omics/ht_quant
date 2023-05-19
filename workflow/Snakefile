@@ -26,7 +26,6 @@ include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
 include: "rules/reference.smk"
 include: "rules/fastqc.smk"
-include: "rules/fastp_functions.smk"
 include: "rules/fastp.smk"
 include: "rules/star.smk"
 include: "rules/report_library_functions.smk"
@@ -43,6 +42,6 @@ rule all:
         # rules.ribodetector_all_samples.input,
         # rules.star_index.input,
         # rules.star_all_samples.input,
-        rules.star_all.input,  # the crams and compressed files are not in the reports
+        # rules.star_all.input,
         rules.report_step.input,
         rules.report_library.input,
