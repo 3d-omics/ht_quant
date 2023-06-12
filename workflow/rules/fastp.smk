@@ -56,6 +56,7 @@ rule fastp_trim_all:
 
 
 rule fastp_fastqc_one:
+    """Run fastqc on one library"""
     input:
         fastq=FASTP / "{sample}.{library}_{end}.fq.gz",
     output:
@@ -65,9 +66,6 @@ rule fastp_fastqc_one:
         FASTP / "{sample}.{library}_{end}_fastqc.log",
     conda:
         "../envs/fastp.yml"
-    params:
-        html=FASTP / "{sample}.{library}_{end}_fastqc.html",
-        zip_=FASTP / "{sample}.{library}_{end}_fastqc.zip",
     shell:
         "fastqc --quiet {input} 2> {log} 1>&2"
 

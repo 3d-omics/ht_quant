@@ -1,7 +1,0 @@
-### Config file for the snakemake pipeline
-
-# n.b., host_genome is the directory where the genome is stored, not the file itself.
-# readlength should be read length - 1
-genome: 1_Data/0_Genome/
-genomedone: 1_Data/0_Genome/chrLength.txt
-readlength: 149

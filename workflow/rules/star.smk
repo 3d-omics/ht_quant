@@ -6,7 +6,7 @@ rule star_index:
     output:
         folder=directory("results/star/index"),
     params:
-        readlength=config["readlength"],
+        sjdbOverhang=params["star"]["index"]["sjdbOverhang"],
     conda:
         "../envs/star.yml"
     log:
@@ -23,7 +23,7 @@ rule star_index:
             --genomeDir {output.folder} \
             --genomeFastaFiles {input.dna} \
             --sjdbGTFfile {input.gtf} \
-            --sjdbOverhang {params.readlength} \
+            --sjdbOverhang {params.sjdbOverhang} \
         2> {log} 1>&2
         """
 
@@ -62,7 +62,7 @@ rule star_align_one:
             --outSAMtype BAM SortedByCoordinate \
             --outReadsUnmapped Fastx \
             --readFilesCommand "gzip -cd" \
-            --quantMode GeneCounts \
+            --quantMode TranscriptomeSAM \
         2>> {log} 1>&2
         """
 
@@ -109,10 +109,10 @@ rule star_cram_one:
         bam=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam",
         reference=REFERENCE / "genome.fa",
     output:
-        cram=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram",
+        cram=protected(STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram"),
         crai=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram.crai",
     log:
-        STAR / "{sample}.{library}.cram.log",
+        STAR / "{sample}.{library}.Aligned.sortedByCoord.out.cram.log",
     conda:
         "../envs/star.yml"
     threads: 24
