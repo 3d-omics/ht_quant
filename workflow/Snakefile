@@ -20,13 +20,14 @@ MAX_THREADS = params["max_threads"]
 configfile: "config/pipeline.yml"
 
 
-include: "rules/common.smk"
 include: "rules/folders.smk"
 include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
 include: "rules/reference.smk"
 include: "rules/fastqc.smk"
+include: "rules/fastp_functions.smk"
 include: "rules/fastp.smk"
+include: "rules/star_functions.smk"
 include: "rules/star.smk"
 include: "rules/report_library_functions.smk"
 include: "rules/report_step.smk"

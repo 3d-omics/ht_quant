@@ -59,6 +59,11 @@ rule fastp_report_all:
     """Collect fastp reports"""
     input:
         [FASTP / f"{sample}.{library}_fastp.json" for sample, library in SAMPLE_LIB],
+        [
+            FASTP / f"{sample}.{library}_{end}_fastqc.zip"
+            for sample, library in SAMPLE_LIB
+            for end in "1 2".split(" ")
+        ],
 
 
 rule fastp:
