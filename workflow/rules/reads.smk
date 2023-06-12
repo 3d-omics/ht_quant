@@ -9,7 +9,7 @@ rule reads_link_one:
     log:
         READS / "{sample}.{library}.log",
     conda:
-        "../envs/empty.yml"
+        "../envs/reads.yml"
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_}
@@ -36,7 +36,7 @@ rule reads_fastqc_one:
     log:
         READS / "{sample}.{library}_{end}_fastqc.log",
     conda:
-        "../envs/fastp.yml"
+        "../envs/reads.yml"
     shell:
         "fastqc --quiet {input} 2> {log} 1>&2"
 
