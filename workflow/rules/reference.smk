@@ -1,4 +1,5 @@
 rule reference_set_dna:
+    """Decompress the reference genome and save it in the reference folder."""
     input:
         fa=features["dna"],
     output:
@@ -12,6 +13,7 @@ rule reference_set_dna:
 
 
 rule reference_set_gtf:
+    """Decompress the reference annotation and save it in the reference folder."""
     input:
         gtf=features["gtf"],
     output:

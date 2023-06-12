@@ -1,4 +1,5 @@
 rule star_index:
+    """Build STAR index of the reference genome"""
     input:
         dna=REFERENCE / "genome.fa",
         gtf=REFERENCE / "annotation.gtf",
@@ -27,7 +28,8 @@ rule star_index:
         """
 
 
-rule star_align:
+rule star_align_one:
+    """Align one library with STAR"""
     input:
         r1=FASTP / "{sample}.{library}_1.fq.gz",
         r2=FASTP / "{sample}.{library}_2.fq.gz",
@@ -65,7 +67,14 @@ rule star_align:
         """
 
 
-rule star_compress_unpaired:
+rule star_align_all:
+    """Align all libraries with STAR"""
+    input:
+        [STAR / f"{sample}.{library}.Log.final.out" for sample, library in SAMPLE_LIB],
+
+
+rule star_compress_unpaired_one:
+    """Compress unpaired reads from one library"""
     input:
         u1=STAR / "{sample}.{library}.Unmapped.out.mate1",
         u2=STAR / "{sample}.{library}.Unmapped.out.mate2",
@@ -85,6 +94,7 @@ rule star_compress_unpaired:
 
 
 rule star_compress_all:
+    """Compress unpaired reads from all the libraries"""
     input:
         [
             STAR / f"{sample}.{library}.Unmapped.out.{mate}.fq.gz"
@@ -93,7 +103,8 @@ rule star_compress_all:
         ],
 
 
-rule star_cram:
+rule star_cram_one:
+    """Convert to cram one library"""
     input:
         bam=STAR / "{sample}.{library}.Aligned.sortedByCoord.out.bam",
         reference=REFERENCE / "genome.fa",
@@ -124,6 +135,7 @@ rule star_cram:
 
 
 rule star_cram_all:
+    """Convert to cram all the libraries"""
     input:
         [
             STAR / f"{sample}.{library}.Aligned.sortedByCoord.out.cram"
@@ -138,7 +150,14 @@ rule star_report_all:
 
 
 rule star_all:
+    """Run all the star rules for all the libraries"""
     input:
         rules.star_compress_all.input,
         rules.star_cram_all.input,
         rules.star_report_all.input,
+
+
+rule star:
+    """Run all the star rules"""
+    input:
+        rules.star_all.input,
