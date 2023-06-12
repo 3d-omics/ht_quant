@@ -1,5 +1,10 @@
 rule report_library_one:
-    """Make a MultiQC report for a single library"""
+    """Make a MultiQC report for a single library
+
+    The --dirs option is used to tell MultiQC to append the folder names to
+    avoid sample collisions. This is necessary because the same sample name
+    can be used for different libraries: reads and fastp.
+    """
     input:
         reads=[
             READS / "{sample}.{library}_1_fastqc.zip",
@@ -27,6 +32,7 @@ rule report_library_one:
             --force \
             --filename {params.library} \
             --outdir {params.out_dir} \
+            --dirs \
             {input} \
         2> {log} 1>&2
         """

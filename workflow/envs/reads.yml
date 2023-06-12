@@ -1,3 +1,5 @@
+# reads.yml: environment to deal with the raw reads
+---
 channels:
   - conda-forge
   - bioconda
