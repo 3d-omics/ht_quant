@@ -1,7 +1,16 @@
 rule report_library_one:
     """Make a MultiQC report for a single library"""
     input:
-        get_star_for_library_report,
+        reads=[
+            READS / "{sample}.{library}_1_fastqc.zip",
+            READS / "{sample}.{library}_2_fastqc.zip",
+        ],
+        fastp=[
+            FASTP / "{sample}.{library}_1_fastqc.zip",
+            FASTP / "{sample}.{library}_2_fastqc.zip",
+            FASTP / "{sample}.{library}_fastp.json",
+        ],
+        star=get_star_for_library_report,
     output:
         REPORT_LIBRARY / "{sample}.{library}.html",
     log:
