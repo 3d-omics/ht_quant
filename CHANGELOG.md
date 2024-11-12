@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.1](https://github.com/3d-omics/ht_quant/compare/v0.2.0...v0.2.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* add tidyr, update and pin ([a6ac043](https://github.com/3d-omics/ht_quant/commit/a6ac0434fe1c8ac64379f33b527bb988d379586a))
+
+
+### Performance Improvements
+
+* group fastp and star align. modify profile so it only handles integers ([5e0e6f9](https://github.com/3d-omics/ht_quant/commit/5e0e6f9093b1d0c7946226f274d383862defb4d7))
+* run reads in the head node ([4dc4b18](https://github.com/3d-omics/ht_quant/commit/4dc4b18fc60aa4afa1a46ea60c5a6dd1eb487eb7))
+
 ## [0.2.0](https://github.com/3d-omics/ht_quant/compare/v0.1.0...v0.2.0) (2024-08-06)
 
 
