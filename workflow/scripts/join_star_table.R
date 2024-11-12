@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 
-library(tidyverse)
 library(argparse)
 
 read_star_counts <- function(filename) {
@@ -12,19 +11,19 @@ read_star_counts <- function(filename) {
     "gene_id", "unstranded", "stranded_forward", "stranded_reverse"
   )
 
-  filename %>%
-    read_tsv(
+  filename |>
+    readr::read_tsv(
       col_names = star_column_names,
       col_select = 1:2,
       skip = 4,
       show_col_types = FALSE
-    ) %>%
-    mutate(
-      sample_id = filename %>%
-        basename() %>%
-        str_remove(".ReadsPerGene.out.tab")
-    ) %>%
-    select(sample_id, gene_id, counts = unstranded)
+    ) |>
+    dplyr::mutate(
+      sample_id = filename |>
+        basename() |>
+        stringr::str_remove(".ReadsPerGene.out.tab")
+    ) |>
+    dplyr::select(sample_id, gene_id, counts = unstranded)
 }
 
 parser <- ArgumentParser()
@@ -59,10 +58,9 @@ files <-
   )
 
 counts_raw <-
-  files %>%
-  map(read_star_counts) %>%
-  bind_rows() %>%
-  pivot_wider(names_from = sample_id, values_from = counts)
+  files |>
+  purrr::map_dfr(read_star_counts) |>
+  tidyr::pivot_wider(names_from = sample_id, values_from = counts)
 
 dir.create(dirname(args$output_file))
-write_tsv(counts_raw, args$output_file)
+readr::write_tsv(counts_raw, args$output_file)

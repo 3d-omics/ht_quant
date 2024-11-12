@@ -3,8 +3,13 @@
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
 # in particular regarding the standardized folder structure mentioned there.
 
+from snakemake.utils import min_version
+
+min_version("8.0")
+
 import pandas as pd
 import yaml
+
 
 # Import configuration files
 params = yaml.load(open("config/params.yml", "r"), Loader=yaml.SafeLoader)
@@ -14,22 +19,34 @@ samples = pd.read_table("config/samples.tsv", comment="#", dtype="str")
 # Generate useful variables
 SAMPLES = samples["sample_id"].drop_duplicates().values.tolist()
 SAMPLE_LIBRARY = samples[["sample_id", "library_id"]].values.tolist()
-BAM_REPORTS = ["stats.tsv", "flagstats.txt", "idxstats.tsv"]
+BAM_REPORTS = ["stats.tsv"]  # , "flagstats.txt", "idxstats.tsv"]
+HOST_NAME = features["host_name"]
 
 
 include: "rules/folders.smk"
-include: "rules/helpers/__main__.smk"
-include: "rules/reads/__main__.smk"
-include: "rules/reference/__main__.smk"
-include: "rules/preprocess/__main__.smk"
-include: "rules/quantify/__main__.smk"
-include: "rules/report/__main__.smk"
+include: "rules/reads.smk"
+include: "rules/fastp.smk"
+include: "rules/multiqc.smk"
+include: "rules/reference.smk"
+include: "rules/star.smk"
+include: "rules/counts.smk"
+
+
+module helpers:
+    snakefile:
+        github("jlanga/snakehelpers", path="workflow/Snakefile", branch="devel")
+    config:
+        params
+
+
+use rule * from helpers as helpers__*
 
 
 rule all:
     input:
-        rules.reads.input,
-        rules.reference.input,
-        rules.preprocess.input,
-        rules.quantify.input,
-        rules.report.input,
+        rules.reads__all.input,
+        rules.fastp__all.input,
+        rules.reference__all.input,
+        rules.star__all.input,
+        rules.counts__all.input,
+        rules.multiqc__all.input,

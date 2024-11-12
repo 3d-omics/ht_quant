@@ -14,3 +14,10 @@ def get_reverse_adapter(wildcards):
         & (samples["library_id"] == wildcards.library_id)
     ]["reverse_adapter"].tolist()[0]
     return reverse_adapter
+
+
+def compose_adapters(wildcards):
+    """Compose the forward and reverse adapter line for fastp"""
+    forward = get_forward_adapter(wildcards)
+    reverse = get_reverse_adapter(wildcards)
+    return f"--adapter_sequence {forward} --adapter_sequence_r2 {reverse}"

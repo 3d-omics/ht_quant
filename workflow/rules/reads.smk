@@ -1,7 +1,7 @@
-include: "__functions__.smk"
+include: "reads_functions.smk"
 
 
-rule reads__link__:
+rule reads:
     """Make a link to the original file, with a prettier name than default"""
     input:
         forward_=get_forward,
@@ -12,7 +12,7 @@ rule reads__link__:
     log:
         READS / "{sample_id}.{library_id}.log",
     conda:
-        "__environment__.yml"
+        "../environments/reads.yml"
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_}
@@ -20,7 +20,7 @@ rule reads__link__:
         """
 
 
-rule reads__link:
+rule reads__all:
     input:
         [
             READS / f"{sample_id}.{library_id}_{end}.fq.gz"
@@ -29,19 +29,5 @@ rule reads__link:
         ],
 
 
-rule reads__fastqc:
-    """Run fastqc on all raw reads"""
-    input:
-        [
-            READS / f"{sample_id}.{library_id}_{end}_fastqc.{extension}"
-            for sample_id, library_id in SAMPLE_LIBRARY
-            for end in ["1", "2"]
-            for extension in ["html", "zip"]
-        ],
-
-
-rule reads:
-    """Link all reads and run fastqc on them"""
-    input:
-        rules.reads__link.input,
-        rules.reads__fastqc.input,
+localrules:
+    reads,

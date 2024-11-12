@@ -1,24 +1,21 @@
+__use_yte__: True
+
 default-resources:
-    runtime: 1h
-    mem_mb: 1G
-    disk_mb: 100G
+    runtime: 60
+    mem_mb: 1024
 
 set-threads:
-    preprocess__fastp__trim__: 24
-    quantify__index: 24
-    quantify__star__align__: 24
-    quantify__star__bam_to_cram__: 24
+    fastp: 24
+    star__index: 24
+    star__align: 24
 
 set-resources:
-    preprocess__fastp__trim__:
-        mem_mb: 4G
+    fastp:
+        mem_mb: 4 * 1024
         runtime: 1h
-    quantify__index:
-        mem_mb: 32G
+    star__index:
+        mem_mb: 32 * 1024
         runtime: 1d
-    quantify__star__align__:
-        mem_mb: 32G
-        runtime: 1d
-    quantify__star__bam_to_cram__:
-        mem_mb: 32G
+    star__align:
+        mem_mb: 32 * 1024
         runtime: 1d

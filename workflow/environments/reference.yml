@@ -1,6 +1,5 @@
 channels:
   - conda-forge
   - bioconda
-  - nodefaults
 dependencies:
-  - pigz =2.8
+  - gzip =1.13
